@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Booking Ruangan | SIMA AZC System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: linear-gradient(145deg, #f0f4fa 0%, #e2eaf1 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-wrapper {
+            max-width: 880px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 48px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .form-header {
+            background: linear-gradient(135deg, #0a2b3e 0%, #134b6b 100%);
+            padding: 28px 36px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .logo-polban {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 8px 18px;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+        }
+        .logo-polban i { font-size: 2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        .logo-polban span { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px; }
+        .header-text h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-text h1 i { font-size: 1.8rem; color: #9ac8e0; }
+        .header-text p { font-size: 0.85rem; opacity: 0.85; margin-top: 6px; }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 8px 18px;
+            border-radius: 50px;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+        .btn-back:hover { background: rgba(255,255,255,0.25); }
+        .form-body { padding: 36px 36px 32px; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px 30px; }
+        .field-group { display: flex; flex-direction: column; gap: 8px; }
+        .field-group.full-width { grid-column: span 2; }
+        label {
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #1c4e6e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        label i { width: 20px; color: #2a7f6e; }
+        input, select, textarea {
+            padding: 12px 16px;
+            border: 1.5px solid #dce7f0;
+            border-radius: 24px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #1a6b8a;
+            box-shadow: 0 0 0 3px rgba(26, 107, 138, 0.15);
+        }
+        select { cursor: pointer; }
+        textarea { resize: vertical; min-height: 90px; }
+        .btn-submit {
+            width: 100%;
+            margin-top: 32px;
+            background: linear-gradient(100deg, #0e3d54, #186983);
+            border: none;
+            padding: 14px 20px;
+            border-radius: 44px;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .btn-submit:hover {
+            transform: scale(0.98);
+            background: linear-gradient(100deg, #0b3144, #115c78);
+            box-shadow: 0 10px 18px -8px rgba(0, 0, 0, 0.2);
+        }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        .alert {
+            margin-bottom: 24px;
+            padding: 14px 20px;
+            border-radius: 32px;
+            font-size: 0.85rem;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            display: none;
+        }
+        .alert.success {
+            background: #dff1e6;
+            color: #146b3a;
+            border-left: 5px solid #2b7a4b;
+            display: flex;
+        }
+        .alert.error {
+            background: #fee9e6;
+            color: #b13e2d;
+            border-left: 5px solid #d9534f;
+            display: flex;
+        }
+        .footer-note {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6c86a3;
+            border-top: 1px solid #e2edf5;
+            padding-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-note i { margin-right: 5px; }
+        @media (max-width: 680px) {
+            .form-grid { grid-template-columns: 1fr; gap: 18px; }
+            .field-group.full-width { grid-column: span 1; }
+            .form-body { padding: 24px 24px 28px; }
+            .form-header { padding: 20px 24px; flex-direction: column; align-items: flex-start; }
+            .logo-polban { align-self: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-wrapper">
+        <div class="form-header">
+            <div class="header-title">
+                <div class="logo-polban">
+                    <i class="fas fa-university"></i>
+                    <span>POLBAN</span>
+                </div>
+                <div class="header-text">
+                    <h1><i class="fas fa-calendar-plus"></i> Form Booking Ruangan</h1>
+                    <p>Gedung BB Administrasi Niaga — SIMA AZC System</p>
+                </div>
+            </div>
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
+            </a>
+        </div>
+
+        <div class="form-body">
+            <div id="alertBox" class="alert"></div>
+
+            <form id="bookingForm">
+                <div class="form-grid">
+                    <div class="field-group">
+                        <label><i class="fas fa-user"></i> Nama Lengkap <span style="color:#e05">*</span></label>
+                        <input type="text" id="nama" placeholder="Masukkan nama lengkap" required>
+                    </div>
+                    <div class="field-group">
+                        <label><i class="fas fa-id-card"></i> NIM / NIP <span style="color:#e05">*</span></label>
+                        <input type="text" id="nim" placeholder="Masukkan NIM atau NIP" required>
+                    </div>
+                    <div class="field-group">
+                        <label><i class="fas fa-users"></i> Kelas <span style="color:#e05">*</span></label>
+                        <input type="text" id="kelas" placeholder="Contoh: 2 AN A" required>
+                    </div>
+                    <div class="field-group">
+                        <label><i class="fas fa-tag"></i> Status Pemohon <span style="color:#e05">*</span></label>
+                        <select id="statusPemohon" required>
+                            <option value="Mahasiswa">Mahasiswa</option>
+                            <option value="Dosen">Dosen</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label><i class="fas fa-door-open"></i> Ruangan <span style="color:#e05">*</span></label>
+                        <select id="ruangan" required>
+                            <option value="">— Pilih Ruangan —</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label><i class="fas fa-calendar"></i> Tanggal <span style="color:#e05">*</span></label>
+                        <input type="date" id="tanggal" required>
+                    </div>
+                    <div class="field-group full-width">
+                        <label><i class="fas fa-clock"></i> Jam <span style="color:#e05">*</span></label>
+                        <select id="jam" required>
+                            <option value="07.00-08.40">07.00 – 08.40</option>
+                            <option value="08.50-10.30">08.50 – 10.30</option>
+                            <option value="10.40-12.20">10.40 – 12.20</option>
+                            <option value="13.00-14.40">13.00 – 14.40</option>
+                            <option value="14.50-16.30">14.50 – 16.30</option>
+                        </select>
+                    </div>
+                    <div class="field-group full-width">
+                        <label><i class="fas fa-pen-to-square"></i> Keperluan <span style="color:#e05">*</span></label>
+                        <textarea id="keperluan" placeholder="Jelaskan keperluan penggunaan ruangan..." required></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i> Ajukan Booking
+                </button>
+            </form>
+
+            <div class="footer-note">
+                <span><i class="fas fa-info-circle"></i> Booking menunggu persetujuan admin</span>
+                <span><i class="fas fa-clock"></i> Proses maks. 1×24 jam</span>
+                <span><i class="fas fa-building"></i> Gedung BB POLBAN</span>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // ⚠️ GANTI URL INI dengan URL deploy Apps Script kamu yang terbaru
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwyFKLjxcj0B7JLrcDBc_SntIxAAVkeA5dvSOEb9DUp-fr6-BlANYyXAaVnIS0sxqyskg/exec';
+
+    document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+
+    // Load daftar ruangan
+    async function loadRooms() {
+        try {
+            const params = new URLSearchParams({ action: 'getAllStatus', t: Date.now() });
+            const res = await fetch(`${WEB_APP_URL}?${params.toString()}`);
+            const data = await res.json();
+            const select = document.getElementById('ruangan');
+            if (data.rooms && data.rooms.length) {
+                data.rooms.forEach(r => {
+                    const opt = document.createElement('option');
+                    opt.value = r.ruangan;
+                    opt.textContent = r.ruangan + (r.status !== 'Kosong' ? ` (${r.status})` : '');
+                    select.appendChild(opt);
+                });
+            }
+        } catch (e) {
+            console.warn('Gagal load ruangan:', e);
+        }
+    }
+
+    function showAlert(msg, type) {
+        const box = document.getElementById('alertBox');
+        box.className = `alert ${type}`;
+        box.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
+        box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        if (type === 'success') {
+            setTimeout(() => { box.className = 'alert'; box.style.display = 'none'; box.innerHTML = ''; }, 6000);
+        }
+    }
+
+    document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+
+        const bookingData = {
+            action: 'addBooking',
+            nama: document.getElementById('nama').value,
+            nim: document.getElementById('nim').value,
+            kelas: document.getElementById('kelas').value,
+            statusPemohon: document.getElementById('statusPemohon').value,
+            ruangan: document.getElementById('ruangan').value,
+            tanggal: document.getElementById('tanggal').value,
+            jam: document.getElementById('jam').value,
+            keperluan: document.getElementById('keperluan').value,
+            t: Date.now()
+        };
+
+        try {
+            // ✅ Kirim lewat GET dengan URLSearchParams (solusi CORS Google Apps Script)
+            const params = new URLSearchParams(bookingData);
+            const res = await fetch(`${WEB_APP_URL}?${params.toString()}`);
+            const result = await res.json();
+
+            if (result.success) {
+                showAlert('✅ Booking berhasil diajukan! Silakan tunggu konfirmasi dari admin.', 'success');
+                document.getElementById('bookingForm').reset();
+                document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+                // Re-load ruangan setelah reset
+                document.getElementById('ruangan').innerHTML = '<option value="">— Pilih Ruangan —</option>';
+                loadRooms();
+            } else {
+                showAlert(`Gagal: ${result.error || 'Terjadi kesalahan tidak diketahui'}`, 'error');
+            }
+        } catch (err) {
+            showAlert(`Koneksi gagal: ${err.message}. Pastikan Apps Script sudah di-deploy dengan akses "Anyone".`, 'error');
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Ajukan Booking';
+    });
+
+    loadRooms();
+</script>
+</body>
+</html>

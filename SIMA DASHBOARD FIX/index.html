@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SIMA Room Manager | Polban BB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --navy: #0C2C47;
+            --green: #2D5652;
+            --yellow: #E2A54D;
+            --aqua: #97D3CD;
+            --pink: #EFEAE6;
+            --mint: #E4F2EA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--mint) 0%, var(--pink) 55%, var(--aqua) 100%);
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--navy);
+            border-radius: 2rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(12, 44, 71, 0.25);
+            border-left: 6px solid var(--yellow);
+            color: var(--mint);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .header h1 i {
+            color: var(--yellow);
+        }
+
+        .header > div:nth-of-type(1) {
+            color: var(--aqua);
+            margin-top: 4px;
+        }
+
+        .badge-gedung {
+            background: var(--yellow);
+            color: var(--navy);
+            border-radius: 40px;
+            padding: 0.3rem 1rem;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 0.9fr;
+            gap: 1.8rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 1.8rem;
+            box-shadow: 0 20px 30px -12px rgba(12, 44, 71, 0.12);
+            overflow: hidden;
+            border: 1px solid var(--aqua);
+        }
+
+        .card-header {
+            background: var(--mint);
+            padding: 1.2rem 1.8rem;
+            border-bottom: 3px solid var(--yellow);
+            font-weight: 700;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--navy);
+        }
+
+        .card-header i {
+            color: var(--green);
+        }
+
+        .card-body {
+            padding: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.3rem;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--green);
+        }
+
+        label i {
+            color: var(--yellow);
+            margin-right: 4px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--aqua);
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            background: #fff;
+            color: var(--navy);
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(151, 211, 205, 0.4);
+        }
+
+        ::placeholder {
+            color: #9fb3c8;
+        }
+
+        .row-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            border: none;
+            padding: 0.9rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            color: var(--yellow);
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--green);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--green);
+            color: var(--green);
+            padding: 0.6rem 1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: var(--aqua);
+            color: var(--navy);
+            border-color: var(--aqua);
+        }
+
+        .room-list {
+            background: var(--mint);
+            border-radius: 1.2rem;
+            padding: 0.8rem;
+            max-height: 280px;
+            overflow-y: auto;
+            border: 1px solid var(--aqua);
+        }
+
+        .room-option {
+            background: white;
+            border-radius: 1rem;
+            padding: 0.7rem 1rem;
+            margin-bottom: 0.6rem;
+            border: 1px solid var(--aqua);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .room-option:hover {
+            border-color: var(--green);
+            background: var(--pink);
+        }
+
+        .room-option input {
+            margin: 0;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            accent-color: var(--green);
+        }
+
+        .room-option label {
+            flex: 1;
+            margin: 0;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--navy);
+        }
+
+        .room-cap {
+            font-size: 0.75rem;
+            background: var(--yellow);
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            color: var(--navy);
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+
+        /* Invoice / QR styling */
+        .invoice {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border: 1px solid var(--aqua);
+            box-shadow: 0 4px 12px rgba(12, 44, 71, 0.08);
+        }
+        .invoice-header {
+            text-align: center;
+            border-bottom: 2px dashed var(--green);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .invoice-header h3 {
+            color: var(--navy);
+            font-weight: 700;
+        }
+        .invoice-header small {
+            color: var(--green);
+        }
+        .invoice-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--mint);
+            font-size: 0.9rem;
+        }
+        .invoice-label {
+            font-weight: 600;
+            color: var(--green);
+        }
+        .invoice-value {
+            color: var(--navy);
+            text-align: right;
+        }
+        .invoice-footer {
+            margin-top: 1.2rem;
+            text-align: center;
+            background: var(--navy);
+            padding: 0.8rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            color: var(--yellow);
+        }
+
+        /* QR code block */
+        .qr-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.2rem;
+            background: var(--mint);
+            border: 2px dashed var(--green);
+            border-radius: 1.2rem;
+        }
+        .qr-wrap canvas, .qr-wrap img {
+            display: block;
+            width: 200px;
+            height: 200px;
+            border-radius: 0.8rem;
+            border: 6px solid #ffffff;
+            background: #ffffff;
+            box-shadow: 0 8px 20px rgba(12, 44, 71, 0.15);
+        }
+        .qr-caption {
+            font-size: 0.85rem;
+            color: var(--green);
+            text-align: center;
+            font-weight: 600;
+        }
+        .qr-summary {
+            margin-top: 0.6rem;
+            font-size: 0.8rem;
+            color: var(--navy);
+            text-align: center;
+        }
+        .qr-summary b { color: var(--green); }
+
+        .btn-download-pdf {
+            margin-top: 1rem;
+            background: var(--green);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            color: #ffffff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-download-pdf:hover {
+            background: var(--navy);
+            color: var(--yellow);
+        }
+        .info-tag {
+            background: var(--mint);
+            border-left: 4px solid var(--yellow);
+            border-radius: 1rem;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: var(--green);
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .info-tag i {
+            color: var(--yellow);
+        }
+
+        /* Print styling untuk PDF */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printableInvoice, #printableInvoice * {
+                visibility: visible;
+            }
+            #printableInvoice {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                margin: 0;
+                padding: 1rem;
+                background: white;
+            }
+            .btn-download-pdf, .card-header, .form-group, .btn-primary, .info-tag, footer, .room-list, .btn-outline {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--green);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <div class="header">
+        <h1><i class="fas fa-chalkboard-user"></i> SIMA Room Manager</h1>
+        <div>Sistem Informasi Manajemen Ruang Kelas Real-Time | Gedung BB Administrasi Niaga | POLBAN</div>
+        <div class="badge-gedung"><i class="fas fa-building"></i> Live Sync: Google Sheets · Integrasi Penuh</div>
+    </div>
+
+    <div class="main-grid">
+        <!-- FORM BOOKING -->
+        <div class="card">
+            <div class="card-header"><i class="fas fa-pen-alt"></i> Form Booking Ruangan</div>
+            <div class="card-body">
+                <form id="bookingForm">
+                    <div class="row-2col">
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i> NAMA LENGKAP</label>
+                            <input type="text" id="nama" placeholder="Masukkan nama lengkap" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-id-card"></i> NIM / NIP</label>
+                            <input type="text" id="nim_nip" placeholder="Masukkan NIM atau NIP" required>
+                        </div>
+                    </div>
+                    <div class="row-2col">
+                        <div class="form-group">
+                            <label><i class="fas fa-graduation-cap"></i> KELAS</label>
+                            <input type="text" id="kelas" placeholder="Contoh: 2 B MAS" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-user-tag"></i> STATUS PEMOHON</label>
+                            <select id="status_pemohon" required>
+                                <option value="Mahasiswa">Mahasiswa</option>
+                                <option value="Dosen">Dosen</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row-2col">
+                        <div class="form-group">
+                            <label><i class="fas fa-chart-line"></i> Kapasitas Ruangan</label>
+                            <select id="filterKapasitas" required>
+                                <option value="">-- Pilih Kapasitas --</option>
+                                <option value="14">14 orang</option>
+                                <option value="32">32 orang</option>
+                                <option value="64">64 orang (gabungan)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-alt"></i> TANGGAL</label>
+                            <input type="date" id="tanggal" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-clock"></i> JAM (Sesi)</label>
+                        <select id="jam_sesi" required>
+                            <option value="07.00 – 08.40">07.00 – 08.40</option>
+                            <option value="08.50 – 10.30">08.50 – 10.30</option>
+                            <option value="10.40 – 12.20">10.40 – 12.20</option>
+                            <option value="13.00 – 14.40">13.00 – 14.40</option>
+                            <option value="14.50 – 16.30">14.50 – 16.30</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-file-alt"></i> KEPERLUAN</label>
+                        <textarea rows="2" id="keperluan" placeholder="Jelaskan keperluan penggunaan ruangan..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-door-open"></i> Ruangan yang tersedia</label>
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 12px; flex-wrap: wrap;">
+                            <button type="button" id="cekRuanganBtn" class="btn-outline"><i class="fas fa-search"></i> Cek Ketersediaan</button>
+                            <button type="button" id="refreshSpreadsheetBtn" class="btn-outline"><i class="fas fa-sync-alt"></i> Refresh Data</button>
+                        </div>
+                        <div id="daftarRuanganContainer" class="room-list">
+                            <div style="color: #6c757d; text-align:center; padding:1rem;">Pilih kapasitas, tanggal, jam lalu klik "Cek Ketersediaan"</div>
+                        </div>
+                        <input type="hidden" id="selectedRuangan" value="">
+                    </div>
+
+                    <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> Ajukan Booking</button>
+                    <div class="info-tag">
+                        <i class="fas fa-info-circle"></i> Booking menunggu persetujuan admin · Proses maks. 1×24 jam · Gedung BB POLBAN
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- INVOICE / BUKTI PEMINJAMAN -->
+        <div class="card">
+            <div class="card-header"><i class="fas fa-receipt"></i> Bukti Peminjaman</div>
+            <div class="card-body">
+                <div id="invoiceContainer">
+                    <div class="invoice" style="background: var(--pink); text-align: center;">
+                        <i class="fas fa-qrcode fa-2x" style="color: var(--green); margin-bottom: 10px;"></i>
+                        <p style="font-size: 0.9rem; color: var(--navy);">Setelah mengajukan booking, kode QR bukti peminjaman akan muncul di sini.<br>Tunjukkan QR ini ke admin untuk verifikasi.</p>
+                    </div>
+                </div>
+                <div id="lastBookingData" style="font-size: 0.75rem; margin-top: 1rem; color: var(--green); text-align: center; font-weight: 600;"></div>
+                <hr style="margin: 1rem 0; border: none; border-top: 1px solid var(--aqua);">
+                <div class="info-tag">
+                    <i class="fas fa-check-circle"></i> Data langsung tersimpan ke Google Sheets (sheet: BOOKING)<br>
+                    <i class="fas fa-qrcode"></i> Pindai QR ini saat verifikasi ke admin.
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer><i class="fas fa-chalkboard"></i> SIMA Room Manager · Real-Time Availability</footer>
+</div>
+
+<script>
+    // ======================== GANTI DENGAN URL APPS SCRIPT ANDA ========================
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNVz6E-vyjmEqn4-VfdLa1bQ5y3UbvcuTV0j5sSSsVTD3PkM8jkmTyeO1YLw1dZ7Y/exec";
+    // ===================================================================================
+
+    const masterRooms = [
+        { name: "BB201", capacity: 32 }, { name: "BB202", capacity: 32 }, { name: "BB203", capacity: 32 }, { name: "BB204", capacity: 32 },
+        { name: "BB301", capacity: 14 }, { name: "BB302", capacity: 14 }, { name: "BB303", capacity: 14 }, { name: "BB304", capacity: 14 },
+        { name: "BB305", capacity: 14 }, { name: "BB306", capacity: 32 }, { name: "BB307", capacity: 32 },
+        { name: "BB306+BB307 (Gabungan)", capacity: 64 }
+    ];
+    let bookingsCache = [];
+
+    async function fetchBookings() {
+        if (SCRIPT_URL.includes("PASTE_URL")) {
+            console.warn("URL belum diisi, simulasi data kosong");
+            return [];
+        }
+        try {
+            const res = await fetch(SCRIPT_URL);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            bookingsCache = Array.isArray(data) ? data : [];
+            return bookingsCache;
+        } catch (err) {
+            console.error("Gagal fetch:", err);
+            return [];
+        }
+    }
+
+    function getRoomsByCapacity(cap) {
+        let capNum = parseInt(cap);
+        if (capNum === 64) return masterRooms.filter(r => r.capacity === 64);
+        if (capNum === 32) return masterRooms.filter(r => r.capacity === 32);
+        if (capNum === 14) return masterRooms.filter(r => r.capacity === 14);
+        return [];
+    }
+
+    function isBooked(room, tanggal, jam) {
+        return bookingsCache.some(b => b.tanggal === tanggal && b.jam_sesi === jam && b.ruangan === room);
+    }
+
+    async function refreshAvailableRooms() {
+        const kapasitas = document.getElementById('filterKapasitas').value;
+        const tanggal = document.getElementById('tanggal').value;
+        const jam = document.getElementById('jam_sesi').value;
+        if (!kapasitas) { showRoomMsg("⚠️ Pilih kapasitas ruangan"); return; }
+        if (!tanggal) { showRoomMsg("📅 Pilih tanggal"); return; }
+        if (!jam) { showRoomMsg("⏰ Pilih sesi jam"); return; }
+
+        await fetchBookings();
+        const possible = getRoomsByCapacity(kapasitas);
+        const available = possible.filter(room => !isBooked(room.name, tanggal, jam));
+
+        if (available.length === 0) {
+            showRoomMsg(`❌ Tidak ada ruangan tersedia untuk kapasitas ${kapasitas} org pada ${tanggal} jam ${jam}.`);
+            document.getElementById('selectedRuangan').value = "";
+            return;
+        }
+        let html = `<div style="margin-bottom: 10px; font-weight: 600; color: var(--navy);">✅ ${available.length} ruangan tersedia:</div>`;
+        available.forEach((room, idx) => {
+            const roomId = room.name.replace(/[^a-zA-Z0-9]/g, '_');
+            html += `
+                <div class="room-option">
+                    <input type="radio" name="pilihRuangan" value="${room.name}" id="room_${roomId}" ${idx === 0 ? 'checked' : ''}>
+                    <label for="room_${roomId}" style="margin:0;">${room.name}</label>
+                    <span class="room-cap">${room.capacity} orang</span>
+                </div>
+            `;
+        });
+        document.getElementById('daftarRuanganContainer').innerHTML = html;
+        const radios = document.querySelectorAll('input[name="pilihRuangan"]');
+        radios.forEach(r => r.addEventListener('change', (e) => document.getElementById('selectedRuangan').value = e.target.value));
+        if (radios.length) {
+            radios[0].checked = true;
+            document.getElementById('selectedRuangan').value = available[0].name;
+        }
+    }
+
+    function showRoomMsg(msg) {
+        document.getElementById('daftarRuanganContainer').innerHTML = `<div style="padding:1rem; text-align:center; color: var(--navy);">${msg}</div>`;
+    }
+
+    // Generate Invoice (QR Code) + tombol download/cetak
+    function showInvoice(booking) {
+        const container = document.getElementById('invoiceContainer');
+
+        // Susun seluruh data bukti peminjaman ke dalam teks yang akan disimpan di QR Code
+        const qrText =
+`SIMA ROOM MANAGER - BUKTI PEMINJAMAN
+Gedung BB Administrasi Niaga | POLBAN
+--------------------------------------
+Nama Lengkap   : ${booking.nama}
+NIM / NIP      : ${booking.nim_nip}
+Kelas          : ${booking.kelas}
+Status Pemohon : ${booking.status_pemohon}
+Ruangan        : ${booking.ruangan}
+Tanggal        : ${booking.tanggal}
+Jam Sesi       : ${booking.jam_sesi}
+Keperluan      : ${booking.keperluan}
+Kapasitas      : ${booking.kapasitas_dipilih} orang
+--------------------------------------
+Tunjukkan QR ini ke admin untuk verifikasi.`;
+
+        // Buat URL QR Code lewat layanan gambar (tidak butuh library JS tambahan)
+        const qrImageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=0C2C47&bgcolor=ffffff&data=" + encodeURIComponent(qrText);
+
+        const invoiceHtml = `
+            <div id="printableInvoice">
+                <div class="invoice">
+                    <div class="invoice-header">
+                        <h3><i class="fas fa-qrcode"></i> SIMA Room Manager - Bukti Peminjaman</h3>
+                        <small>Gedung BB Administrasi Niaga | POLBAN</small>
+                    </div>
+                    <div class="qr-wrap">
+                        <img id="qrcode" src="${qrImageUrl}" alt="QR Code Bukti Peminjaman" width="200" height="200">
+                        <div class="qr-caption"><i class="fas fa-mobile-alt"></i> Pindai QR untuk melihat detail booking</div>
+                        <div class="qr-summary">
+                            <b>${escapeHtml(booking.nama)}</b> · ${escapeHtml(booking.ruangan)}<br>
+                            ${escapeHtml(booking.tanggal)} · ${escapeHtml(booking.jam_sesi)}
+                        </div>
+                    </div>
+                    <div class="invoice-footer">
+                        <i class="fas fa-stamp"></i> Tunjukkan Bukti Ini Ke Admin <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+            <button id="downloadPdfBtn" class="btn-download-pdf"><i class="fas fa-download"></i> Download PDF / Cetak</button>
+        `;
+        container.innerHTML = invoiceHtml;
+
+        // Event listener untuk tombol download PDF
+        const pdfBtn = document.getElementById('downloadPdfBtn');
+        if (pdfBtn) {
+            pdfBtn.addEventListener('click', () => {
+                window.print();
+            });
+        }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // SUBMIT BOOKING
+    async function submitBooking(event) {
+        event.preventDefault();
+        const nama = document.getElementById('nama').value.trim();
+        const nim_nip = document.getElementById('nim_nip').value.trim();
+        const kelas = document.getElementById('kelas').value.trim();
+        const status_pemohon = document.getElementById('status_pemohon').value;
+        const kapasitas = document.getElementById('filterKapasitas').value;
+        const tanggal = document.getElementById('tanggal').value;
+        const jam = document.getElementById('jam_sesi').value;
+        const keperluan = document.getElementById('keperluan').value.trim();
+        let ruangan = document.getElementById('selectedRuangan').value;
+        
+        if (!ruangan) {
+            const selected = document.querySelector('input[name="pilihRuangan"]:checked');
+            if (selected) ruangan = selected.value;
+            else { alert("Silakan pilih ruangan yang tersedia (klik Cek Ketersediaan)."); return; }
+        }
+        if (!nama || !nim_nip || !kelas || !tanggal || !jam || !keperluan || !kapasitas) {
+            alert("Harap lengkapi semua field.");
+            return;
+        }
+
+        await fetchBookings();
+        if (isBooked(ruangan, tanggal, jam)) {
+            alert("Ruangan sudah dibooking untuk tanggal/jam tersebut. Silakan pilih lain.");
+            refreshAvailableRooms();
+            return;
+        }
+
+        const payload = {
+            nama, nim_nip, kelas, status_pemohon, ruangan, tanggal, jam_sesi: jam, keperluan, kapasitas_dipilih: kapasitas
+        };
+
+        if (SCRIPT_URL.includes("PASTE_URL")) {
+            alert("⚠️ Demo mode: URL Apps Script belum diatur. Data tidak tersimpan ke spreadsheet, namun QR bukti tetap dibuat.\n\n" + JSON.stringify(payload, null, 2));
+            showInvoice(payload);
+            document.getElementById('lastBookingData').innerHTML = `🔄 Simulasi booking: ${ruangan} pada ${tanggal} ${jam}. (Tidak tersimpan)`;
+            return;
+        }
+
+        try {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            alert("✅ Booking berhasil dikirim! Data telah masuk ke Google Sheets.");
+            showInvoice(payload);
+            document.getElementById('lastBookingData').innerHTML = `✅ Booking berhasil: ${ruangan} pada ${tanggal} ${jam}. Simpan QR ini.`;
+            // Reset form
+            document.getElementById('nama').value = '';
+            document.getElementById('nim_nip').value = '';
+            document.getElementById('kelas').value = '';
+            document.getElementById('keperluan').value = '';
+            await refreshAvailableRooms();
+        } catch (err) {
+            console.error("Submit error:", err);
+            alert("Terjadi kesalahan: " + err.message);
+        }
+    }
+
+    function setDefaultDate() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('tanggal').value = today;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setDefaultDate();
+        document.getElementById('cekRuanganBtn').addEventListener('click', refreshAvailableRooms);
+        document.getElementById('refreshSpreadsheetBtn').addEventListener('click', async () => {
+            await fetchBookings();
+            alert("Data booking terbaru dari spreadsheet dimuat.");
+            if (document.getElementById('filterKapasitas').value && document.getElementById('tanggal').value) {
+                refreshAvailableRooms();
+            }
+        });
+        document.getElementById('bookingForm').addEventListener('submit', submitBooking);
+        fetchBookings();
+    });
+</script>
+</body>
+</html>
